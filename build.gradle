@@ -1,0 +1,46 @@
+group 'brt'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+configurations {
+    ittestCompile.extendsFrom testCompile
+    ittestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+    ittest {
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+
+        java.srcDir file('src/ittest/java')
+    }
+
+    ittest {
+        resources.srcDir file('src/ittest/resources')
+    }
+}
+
+task itest(type: Test) {
+    testClassesDir = sourceSets.ittest.output.classesDir
+    classpath = sourceSets.ittest.runtimeClasspath
+
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.eclipse.jetty', name: 'jetty-client', version: '9.3.9.M1'
+    compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.3.9.M1'
+    compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.3.9.M1'
+    compile group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '2.22.2'
+    compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: '2.22.2'
+}
