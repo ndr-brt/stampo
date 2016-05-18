@@ -5,25 +5,15 @@ apply plugin: 'java'
 
 sourceCompatibility = 1.8
 
-configurations {
-    ittestCompile.extendsFrom testCompile
-    ittestRuntime.extendsFrom testRuntime
-}
-
 sourceSets {
     ittest {
-        compileClasspath += main.output + test.output
-        runtimeClasspath += main.output + test.output
-
         java.srcDir file('src/ittest/java')
-    }
-
-    ittest {
         resources.srcDir file('src/ittest/resources')
     }
+
 }
 
-task itest(type: Test) {
+task ittest(type: Test) {
     testClassesDir = sourceSets.ittest.output.classesDir
     classpath = sourceSets.ittest.runtimeClasspath
 
@@ -31,6 +21,8 @@ task itest(type: Test) {
         events "passed", "skipped", "failed"
     }
 }
+
+check.dependsOn ittest
 
 repositories {
     mavenCentral()
@@ -43,4 +35,8 @@ dependencies {
     compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.3.9.M1'
     compile group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '2.22.2'
     compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: '2.22.2'
+    ittestCompile sourceSets.main.output
+    ittestCompile configurations.testCompile
+    ittestCompile sourceSets.test.output
+    ittestRuntime configurations.testRuntime
 }
