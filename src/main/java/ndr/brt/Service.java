@@ -28,7 +28,7 @@ public class Service {
 
     @POST
     public Response stamp() {
-        commandHandler.handle("aaaa");
+        commandHandler.handle(new Stamp());
         return Response.created(null).build();
     }
 
