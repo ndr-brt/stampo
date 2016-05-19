@@ -16,7 +16,7 @@ public class Application {
 
         ServletHolder servlet = context.addServlet(ServletContainer.class, "/*");
         servlet.setInitOrder(0);
-        servlet.setInitParameter("jersey.config.server.provider.classnames", RestApiServlet.class.getCanonicalName());
+        servlet.setInitParameter("jersey.config.server.provider.classnames", Service.class.getCanonicalName());
         return server;
     }
 }

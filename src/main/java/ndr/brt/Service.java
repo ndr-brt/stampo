@@ -8,7 +8,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/")
-public class RestApiServlet {
+public class Service {
+
+    private CommandHandler commandHandler;
+
+    public Service(CommandHandler commandHandler) {
+        this.commandHandler = commandHandler;
+    }
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -18,6 +24,7 @@ public class RestApiServlet {
 
     @POST
     public Response stamp() {
+        commandHandler.handle("aaaa");
         return Response.created(null).build();
     }
 
