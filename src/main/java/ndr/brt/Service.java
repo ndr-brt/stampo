@@ -12,6 +12,10 @@ public class Service {
 
     private CommandHandler commandHandler;
 
+    public Service() {
+        this(new RealCommandHandler());
+    }
+
     public Service(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
     }
