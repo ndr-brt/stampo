@@ -8,4 +8,8 @@ public class Stamped {
     public Stamped(Date date) {
         this.date = date;
     }
+
+    public Date getDate() {
+        return date;
+    }
 }

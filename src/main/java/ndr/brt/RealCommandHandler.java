@@ -9,7 +9,13 @@ public class RealCommandHandler implements CommandHandler {
     private EventBus eventBus;
 
     public RealCommandHandler() {
-        this(new RealEventStore(), new EventBus());
+        this(new RealEventStore(), createEventBus());
+    }
+
+    private static EventBus createEventBus() {
+        EventBus eventBus = new EventBus();
+        eventBus.register(new StampsListener());
+        return eventBus;
     }
 
     public RealCommandHandler(EventStore eventStore, EventBus eventBus) {
