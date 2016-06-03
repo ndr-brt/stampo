@@ -6,7 +6,7 @@ public class StampsListener {
     private Repository repository;
 
     public StampsListener() {
-        this(null); // TODO: implement repository
+        this(new MongoStampsViewRepository());
     }
 
     public StampsListener(Repository repository) {

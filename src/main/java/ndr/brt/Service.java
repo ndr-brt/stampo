@@ -1,5 +1,7 @@
 package ndr.brt;
 
+import com.google.gson.Gson;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -11,19 +13,21 @@ import javax.ws.rs.core.Response;
 public class Service {
 
     private CommandHandler commandHandler;
+    private Repository repository;
 
     public Service() {
-        this(new RealCommandHandler());
+        this(new RealCommandHandler(), new MongoStampsViewRepository());
     }
 
-    public Service(CommandHandler commandHandler) {
+    public Service(CommandHandler commandHandler, Repository repository) {
         this.commandHandler = commandHandler;
+        this.repository = repository;
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String test() {
-        return "Segnato";
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response get() {
+        return Response.ok(new Gson().toJson(repository.getAll())).build();
     }
 
     @POST
