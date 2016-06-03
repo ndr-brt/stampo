@@ -46,13 +46,7 @@ public class TimbroServiceITest {
     public void stamp_time_and_then_read_it() throws Exception {
         client.POST("http://localhost:8080/").send();
 
-        ContentResponse response = client.GET("http://localhost:8080/");
-
-        String result = response.getContentAsString();
-        Type listType = new TypeToken<List<Date>>() {}.getType();
-        Gson gson = new Gson();
-
-        List<Date> stamps = gson.fromJson(result, listType);
+        List<Date> stamps = getStampsFrom(client.GET("http://localhost:8080/"));
 
         assertEquals(1, stamps.size());
         assertEquals(Date.class, stamps.get(0).getClass());
@@ -63,6 +57,13 @@ public class TimbroServiceITest {
         ContentResponse send = client.POST("http://localhost:8080/").send();
 
         assertThat(send.getStatus(), is(CREATED.getStatusCode()));
+    }
+
+    private List<Date> getStampsFrom(ContentResponse response) {
+        String result = response.getContentAsString();
+        Type listType = new TypeToken<List<Date>>() {}.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(result, listType);
     }
 
 }
