@@ -11,20 +11,22 @@ import java.util.Date;
 import java.util.List;
 
 public class MongoStampsViewRepository implements Repository<Date> {
-    @Override
-    public void insert(Date object) {
+
+    private final MongoCollection<Document> stamps;
+
+    public MongoStampsViewRepository() {
         MongoClient client = new MongoClient("localhost", 12345);
         MongoDatabase database = client.getDatabase("stampo");
-        MongoCollection<Document> stamps = database.getCollection("stamps");
+        stamps = database.getCollection("stamps");
+    }
+
+    @Override
+    public void insert(Date object) {
         stamps.insertOne(new Document("date", object));
-        client.close();
     }
 
     @Override
     public List<Date> getAll() {
-        MongoClient client = new MongoClient("localhost", 12345);
-        MongoDatabase database = client.getDatabase("stampo");
-        MongoCollection<Document> stamps = database.getCollection("stamps");
         List<Date> results = new ArrayList<>();
         stamps.find().forEach((Block<? super Document>) d -> results.add((Date) d.get("date")));
         return results;
