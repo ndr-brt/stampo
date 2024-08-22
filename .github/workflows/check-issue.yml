@@ -1,0 +1,54 @@
+name: check issue
+
+on:
+  workflow_call:
+    inputs:
+      triage-label:
+        description: if true, adds a triage label when the issue is opened or reopened
+        type: boolean
+        default: false
+    secrets:
+      github-token:
+        required: true
+      discord-webhook:
+        required: true
+
+jobs:
+  issue-first-interaction:
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.github-token }}
+          issue-message: 'Thanks for your contribution :fire: We will take a look asap :rocket:'
+
+  triage-label:
+    if: inputs.triage-label == true && contains(fromJson('["opened", "reopened"]'), github.event.action)
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - run: gh issue edit "$NUMBER" --add-label "$LABELS"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+          LABELS: triage
+
+  discord-message:
+    if: contains(fromJson('["opened", "reopened"]'), github.event.action)
+    runs-on: ubuntu-latest
+    steps:
+      - name: New Issue
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.discord-webhook }}
+          avatar-url: https://avatars.githubusercontent.com/u/9919?s=200&v=4
+          embed-author-name: ${{ github.event.sender.login }}
+          embed-author-url: ${{ github.event.sender.html_url }}
+          embed-author-icon-url: ${{ github.event.sender.avatar_url }}
+          embed-title: ${{ github.event.issue.title }}
+          embed-url: ${{ github.event.issue.html_url }}
+          embed-description: A **issue** has been opened in ${{ github.repository }}.
+          embed-color: 14023876

@@ -1,0 +1,13 @@
+name: check issue
+
+on:
+  issues:
+
+jobs:
+  meta:
+    uses: ./.github/workflows/check-issue.yml
+    with:
+      triage-label: true
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      discord-webhook: ${{ secrets.DISCORD_WEBHOOK_GITHUB }}

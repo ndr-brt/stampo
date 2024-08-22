@@ -1,0 +1,12 @@
+name: check pull request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, reopened, labeled, unlabeled]
+
+jobs:
+  check:
+    uses: ./.github/workflows/check-pull-request.yml
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+      discord-webhook: ${{ secrets.DISCORD_WEBHOOK_GITHUB }}

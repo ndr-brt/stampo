@@ -1,0 +1,28 @@
+name: check issue
+
+on:
+  workflow_call:
+    secrets:
+      github-token:
+        required: true
+      discord-webhook:
+        required: true
+
+jobs:
+
+  discord-message:
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - name: New Discussion
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.discord-webhook }}
+          avatar-url: https://avatars.githubusercontent.com/u/9919?s=200&v=4
+          embed-author-name: ${{ github.event.sender.login }}
+          embed-author-url: ${{ github.event.sender.html_url }}
+          embed-author-icon-url: ${{ github.event.sender.avatar_url }}
+          embed-title: ${{ github.event.discussion.title }}
+          embed-url: ${{ github.event.discussion.html_url }}
+          embed-description: A **discussion** has been opened in ${{ github.repository }}.
+          embed-color: 16305330
