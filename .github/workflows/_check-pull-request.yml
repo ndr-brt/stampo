@@ -1,0 +1,11 @@
+name: check pull request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, reopened, labeled, unlabeled]
+
+jobs:
+  check:
+    uses: ./.github/workflows/check-pull-request.yml
+    secrets:
+      envGH: ${{ secrets.GITHUB_TOKEN }}
