@@ -1,0 +1,10 @@
+name: check pull request
+
+on:
+  pull_request:
+
+jobs:
+  check:
+    uses: ./.github/workflows/check-pull-request.yml
+    secrets:
+      envGH: ${{ secrets.GITHUB_TOKEN }}
