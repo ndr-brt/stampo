@@ -1,0 +1,12 @@
+name: Check Issues
+
+on:
+  issues:
+
+jobs:
+  meta:
+    uses: ./.github/workflows/check-issue.yml
+    with:
+      triage-label: true
+    secrets:
+      envGH: ${{ secrets.GITHUB_TOKEN }}
